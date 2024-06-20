@@ -1,16 +1,24 @@
 import { useState, useEffect, useRef } from "react";
 
+import "./styles.css";
+
 const Navbar = () => {
   const [dropdown, setDropdown] = useState(false);
+
   const ref = useRef();
+
   useEffect(() => {
     const handler = (event) => {
       if (dropdown && ref.current && !ref.current.contains(event.target)) {
-        console.log("inside if statement!");
         setDropdown(false);
       }
     };
     document.addEventListener("mousedown", handler);
+
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", handler);
+    };
   }, [dropdown]);
 
   return (
@@ -18,7 +26,7 @@ const Navbar = () => {
       <ul>
         <li>Home</li>
         <li>About</li>
-        <li ref={ref} style={{ background: "peru" }}>
+        <li ref={ref}>
           <button onClick={() => setDropdown((prev) => !prev)}>
             Services <span>&#8595;</span>
           </button>
